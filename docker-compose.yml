@@ -1,0 +1,26 @@
+services:
+  questdb-8-1:
+    image: questdb/questdb:8.1.4
+    environment:
+    - QDB_CAIRO_SQL_COPY_ROOT=/var/lib/questdb/questdb_import
+    - QDB_PG_PASSWORD=${QDB_PG_PASSWORD}
+    ports:
+    - 9000:9000
+    - 9009:9009
+    - 8812:8812
+    volumes:
+    - "./db/questdb-8-1:/var/lib/questdb"
+    - "./db/questdb-8-1/import_root:/var/lib/questdb/questdb_import"
+
+  questdb-8-2:
+    image: questdb/questdb:8.2.0
+    environment:
+    - QDB_CAIRO_SQL_COPY_ROOT=/var/lib/questdb/questdb_import
+    - QDB_PG_PASSWORD=${QDB_PG_PASSWORD}
+    ports:
+    - 49000:9000
+    - 49009:9009
+    - 48812:8812
+    volumes:
+    - "./db/questdb-8-2:/var/lib/questdb"
+    - "./db/questdb-8-2/import_root:/var/lib/questdb/questdb_import"
