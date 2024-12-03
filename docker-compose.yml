@@ -13,7 +13,7 @@ services:
     - "./db/questdb-8-1/import_root:/var/lib/questdb/questdb_import"
 
   questdb-8-2:
-    image: questdb/questdb:8.2.0
+    image: questdb/questdb:8.2.1
     environment:
     - QDB_CAIRO_SQL_COPY_ROOT=/var/lib/questdb/questdb_import
     - QDB_PG_PASSWORD=${QDB_PG_PASSWORD}

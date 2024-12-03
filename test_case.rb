@@ -19,7 +19,7 @@ puts conn_8_1.exec_params(LIMIT_ERROR_SQL, LIMIT_BINDS).values.join(", ")
 puts conn_8_1.exec_params(IN_ERROR_SQL, IN_BINDS).values.join(", ")
 
 conn_8_2 = PG.connect(**conn_params_8_2)
-puts "QuestDB version 8.2.0"
+puts "QuestDB version 8.2.1"
 puts conn_8_2.exec_params(NO_LIMIT_ERROR_SQL, LIMIT_BINDS).values.join(", ")
 
 begin

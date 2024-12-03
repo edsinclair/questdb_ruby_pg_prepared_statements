@@ -34,7 +34,7 @@
   QuestDB version 8.1.4
   2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
   2022-01-03 13:24:40.000000, URS17006, EGA-03Jan22@08_24_40, 2022-01-03 14:15:50.000000, 2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
-  QuestDB version 8.2.0
+  QuestDB version 8.2.1
   2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
   ERROR:  undefined bind variable: 4
   LINE 1: ...ity" = $2 AND "events"."start_ts" BETWEEN $3 AND $4 LIMIT $5
@@ -43,7 +43,7 @@
   LINE 1: ...T "events".* FROM "events" WHERE "events"."name" IN ($1, $2)
   ```
 
-* psycopg included for comparison, but it does not throw an error
+* psycopg included for comparison, but strangely it only throws error for the IN clause bind variable, not the LIMIT
 
   ```
   pip install -r requirements.txt && ./test_case.py
@@ -58,7 +58,7 @@
   executing with IN bind variable
   (datetime.datetime(2022, 1, 3, 13, 24, 40), 'URS17006', 'EGA-03Jan22@08_24_40', datetime.datetime(2022, 1, 3, 14, 15, 50))
   (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
-  QuestDB version 8.2.0
+  QuestDB version 8.2.1
   executing with LIMIT bind variable
   (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
   executing with IN bind variable
@@ -70,3 +70,34 @@
   psycopg.DatabaseError: undefined bind variable: 0
   LINE 1: ...T "events".* FROM "events" WHERE "events"."name" IN ($1, $2)
   ```
+
+* results with `pg.legacy.mode.enabled=true`
+
+
+ ```
+
+  $> ./test_case.rb
+
+  QuestDB version 8.1.4
+  2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
+  2022-01-03 13:24:40.000000, URS17006, EGA-03Jan22@08_24_40, 2022-01-03 14:15:50.000000, 2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
+  QuestDB version 8.2.1
+  2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
+  2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
+  2022-01-03 13:24:40.000000, URS17006, EGA-03Jan22@08_24_40, 2022-01-03 14:15:50.000000, 2022-01-03 14:00:50.000000, URS17005, EGA-03Jan22@09_00_50, 2022-01-03 14:42:00.000000
+
+  $> ./test_case.py
+
+  QuestDB version 8.1.4
+  executing with LIMIT bind variable
+  (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
+  executing with IN bind variable
+  (datetime.datetime(2022, 1, 3, 13, 24, 40), 'URS17006', 'EGA-03Jan22@08_24_40', datetime.datetime(2022, 1, 3, 14, 15, 50))
+  (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
+  QuestDB version 8.2.1
+  executing with LIMIT bind variable
+  (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
+  executing with IN bind variable
+  (datetime.datetime(2022, 1, 3, 13, 24, 40), 'URS17006', 'EGA-03Jan22@08_24_40', datetime.datetime(2022, 1, 3, 14, 15, 50))
+  (datetime.datetime(2022, 1, 3, 14, 0, 50), 'URS17005', 'EGA-03Jan22@09_00_50', datetime.datetime(2022, 1, 3, 14, 42))
+ ```

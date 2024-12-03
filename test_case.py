@@ -21,7 +21,7 @@ with psycopg.connect("host=localhost user=admin password=postgres port=8812", cu
         for record in cur:
             print(record)
 
-print("QuestDB version 8.2.0")
+print("QuestDB version 8.2.1")
 with psycopg.connect("host=localhost user=admin password=postgres port=48812", cursor_factory=psycopg.RawCursor) as conn:
     with conn.cursor() as cur:
         print("executing with LIMIT bind variable")
